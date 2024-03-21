@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Проекты.</title>
+  <style>
+      .slider-container {
+          position: relative;
+          width: 600px;
+          height: 400px;
+          margin-top: 25px;
+          margin-right: auto;
+          margin-bottom: 50px;
+          margin-left: auto;
+          overflow: hidden;
+      }
+      .slider {
+          display: flex;
+          transition: transform 0.5s ease-in-out;
+      }
+      .slide {
+          position: relative;
+          flex: 0 0 600px; /* Убедитесь, что каждый слайд имеет фиксированную ширину */
+      }
+      .slide_text {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          background-color: rgba(0, 0, 0, 0.5);
+          color: white;
+          padding: 5px;
+      }
+      .slider img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+      .prev-button,
+      .next-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 50px;
+          height: 50px;
+          background-color: transparent;
+          border: none;
+          font-size: 24px;
+          color: white;
+      }
+
+      .prev-button {
+          left: 10px;
+      }
+
+      .next-button {
+          right: 10px;
+      }
+
+      .picture {
+          border-radius: 20px;
+      }
+      body {
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static "blog/img/projects main theme.png" %}');
+            background-size: cover;
+            background-position: center;
+        }
+      .header {
+            background-color: black;
+            overflow: hidden;
+      }
+      .header a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+      }
+      .header a:hover {
+            background-color: #ddd;
+            color: black;
+      }
+      .header a.active {
+            background-color: white;
+            color: black;
+      }
+  </style>
+</head>
+<body>
+    <div class="header">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'projects' %}">Projects</a>
+        <a href="{% url 'tasks' %}">Tasks</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contacts' %}">Contacts</a>
+    </div>
+    <main>
+      <div class="slider-container">
+        <div class="slider">
+          <div class="slide">
+            <img src="{% static 'blog/img/projects neural networks.png' %}" width="600" height="400" alt="Белый пушистый кот" class="picture">
+            <div class="slide_text">Нейронные сети.</div>
+          </div>
+          <div class="slide">
+            <img src="{% static 'blog/img/projects web-app.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+            <div class="slide_text">Веб-сайты.</div>
+          </div>
+          <div class="slide">
+            <img src="{% static 'blog/img/projects graphic interfaces.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+            <div class="slide_text">Графические интерфейсы.</div>
+          </div>
+        </div>
+        <button class="prev-button" type="button" aria-label="Посмотреть предыдущий слайд">&lt;</button>
+        <button class="next-button" type="button" aria-label="Посмотреть следующий слайд">&gt;</button>
+      </div>
+    </main>
+    <script src="{% static 'blog/js/projects.js' %}"></script>
+</body>
+</html>
