@@ -4,7 +4,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>О нас.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Page</title>
     <style>
         body {
             margin: 0;
@@ -37,11 +38,12 @@
         .content {
             background-color: black;
             color: white;
-            margin-top: -15px;
+            margin-top: 0px;
             margin-bottom: 0;
             margin-left: 10%;
             margin-right: 10%;
             padding: 20px;
+            height: 100vh;
         }
         .content p {
             margin-bottom: 20px;
@@ -49,14 +51,105 @@
         }
         .participant {
             display: flex;
+            margin-top: 0px;
             align-items: center;
             margin-bottom: 20px;
+            flex-direction: column;
+        }
+        .overlay_name {
+            position: absolute;
+            border-radius: 20px;
+            top: 60px;
+            right: 420px;
+            width: 240px;
+            height: 20px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay_text_name {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.2em;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay_role {
+            position: absolute;
+            border-radius: 20px;
+            right: 280px;
+            top: 85px;
+            width: 380px;
+            height: 80px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay_text_role {
+            color: black;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.2em;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay_citation {
+            position: absolute;
+            border-radius: 20px;
+            right: 170px;
+            top: 170px;
+            width: 490px;
+            height: 120px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay_text_citation {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.2em;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .participant img {
-            margin-right: 20px;
-            border-radius: 5px;
+            margin-right: 500px;
+            border-radius: 10px;
             width: 200px;
-            height: auto;
+            height: 215px;
+            margin-top: -10px;
+            border: 10px solid white;
+            justify-content: center;
+            align-items: center;
+        }
+        .content a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: white;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .content a.button:hover {
+            background-color: white;
         }
     </style>
 </head>
@@ -68,32 +161,32 @@
         <a href="{% url 'about' %}">About</a>
         <a href="{% url 'contacts' %}">Contacts</a>
     </div>
+
     <div class="content">
+        {% for item in page_data %}
         <div class="participant">
-            <img src="{% static "blog/img/azarov.jpg" %}" alt="Азаров Владимир">
-            <div>
-                <p>Азаров Владимир</p>
-                <p>Информация: Оператор FPV-дронов, который способен создать невероятные и захватывающие видеоролики с воздушной перспективы.</p>
-                <p>Главная цитата: "Начальнику второго отделения прибыть в 314 кабинет" - это не просто фраза, это наше девиз, который символизирует нашу организованность и четкость в работе.</p>
+            <div class="overlay_name">
+                <h2 class="overlay_text_name">{{ item.Имя }}</h2>
+            </div>
+            <div class="overlay_role">
+                <p class="overlay_text_role">{{ item.Роль }}</p>
+            </div>
+            <div class="overlay_citation">
+                <p class="overlay_text_citation">{{ item.Цитата }}</p>
+            </div>
+            <div class="overlay_photo">
+                <img src="{% static item.Фото %}" alt="Фото {{ item.Имя }}">
             </div>
         </div>
-        <div class="participant">
-            <img src="{% static "blog/img/zyukov.jpg" %}" alt="Зюков Антон">
-            <div>
-                <p>Зюков Антон</p>
-                <p>Информация: Оператор "евреев" - Его уникальная способность искусно торговать, находя лучшие предложения и взаимовыгодные сделки для нашей команды.</p>
-                <p>Главная цитата: "Как прогреть гоя?" - эта загадочная фраза стала нашим лозунгом, отражающим нашу способность преодолевать любые трудности и находить нестандартные решения.</p>
-            </div>
-        </div>
-        <div class="participant">
-            <img src="{% static "blog/img/petrukhin.jpg" %}" alt="Петрухин Владислав">
-            <div>
-                <p>Петрухин Владислав</p>
-                <p>Информация: -</p>
-                <p>Главная цитата: -</p>
-            </div>
-        </div>
-        <p>Мы - не просто команда, а настоящие коллеги, каждый вносит свою уникальную лепту в общее дело. Наша цель - создавать контент, который вдохновляет и заставляет задуматься.</p>
+        {% endfor %}
+
+        {% if page_data.has_previous %}
+        <a href="?page={{ page_data.previous_page_number }}" class="button">Предыдущий</a>
+        {% endif %}
+
+        {% if page_data.has_next %}
+        <a href="?page={{ page_data.next_page_number }}" class="button">Следующий</a>
+        {% endif %}
     </div>
 </body>
 </html>
