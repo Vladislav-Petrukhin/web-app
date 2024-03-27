@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: 'django'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - "DJANGO_DATABASE_HOST=db"
+      - "DJANGO_DATABASE_NAME=django"
+      - "DJANGO_DATABASE_USER=root"
+      - "DJANGO_DATABASE_PASSWORD=admin"
+
+volumes:
+  mysql-data:
