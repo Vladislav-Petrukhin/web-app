@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static "blog/img/contacts theme.png" %}');
+            background-size: 120%;
+            background-position: center;
+        }
+        .header {
+            background-color: black;
+            overflow: hidden;
+        }
+        .header a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .header a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .header a.active {
+            background-color: white;
+            color: black;
+        }
+        .table-container {
+            width: 80%;
+            margin-top: 10px;
+            margin-right: auto;
+            margin-bottom: 50px;
+            margin-left: auto;
+            padding: 20px;
+        }
+        .table-container iframe {
+            border-radius: 5px;
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<textarea id="text-to-translate" rows="4" cols="50" placeholder="Введите текст для перевода"></textarea>
+<br>
+<textarea id="translation-result" rows="4" cols="50" placeholder="Перевод"></textarea>
+<br>
+<button id="switch-lang">Сменить язык перевода</button>
+
+<script>
+let sourceLang = 'ru';
+let targetLang = 'en';
+
+document.getElementById('switch-lang').addEventListener('click', function() {
+    // Меняем языки местами
+    [sourceLang, targetLang] = [targetLang, sourceLang];
+
+    // Обновляем placeholder для поля ввода, чтобы отразить смену языка
+    document.getElementById('text-to-translate').placeholder = `Введите текст (${sourceLang === 'ru' ? 'русский' : 'английский'})`;
+
+    // Очищаем поля ввода и вывода
+    document.getElementById('text-to-translate').value = '';
+    document.getElementById('translation-result').value = '';
+});
+
+function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        }, wait);
+        if (immediate && !timeout) func.apply(context, args);
+    };
+}
+
+document.getElementById('text-to-translate').addEventListener('input', debounce(function() {
+    var text = this.value;
+    if (text.trim().length > 0) {
+        fetch('/translate/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({text: text, source: sourceLang, target: targetLang})
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('translation-result').textContent = data.translation;
+        })
+        .catch(error => console.error('Ошибка:', error));
+    }
+}, 500));
+</script>
+
+
+</body>
+</html>

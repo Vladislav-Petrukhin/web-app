@@ -174,6 +174,12 @@
           background-color: #333;
         }
     </style>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript">
+		var isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+	</script>
 </head>
 <body>
     <main>
@@ -203,6 +209,179 @@
                 <img src="{% static 'blog/img/about.png' %}" alt="О нас">
             </a>
         </div>
+		
+		<button type="button" class="btn btn-primary">Войти</button>
+		
+		<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="modalLabel">Войти</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+			  </div>
+			  <div class="modal-body">
+				<form id="loginForm" method="post">
+                  <div class="mb-3">
+                    <label for="username" class="col-form-label">Email:</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="col-form-label">Пароль:</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Вход</button>
+                  </div>
+                </form>
+			  </div>
+			  <div class="modal-footer">
+				<a href="#" class="btn btn-secondary" id="registerBtn">Регистрация</a>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="alreadyLoggedInModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Вход выполнен</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p>Вы уже вошли в систему.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="{% url 'logout' %}" class="btn btn-secondary">Выйти</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="registerModalLabel">Зарегистрироваться</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+			  </div>
+			  <div class="modal-body">
+				<form id="registerForm">
+				  <div class="mb-3">
+					<label for="email" class="col-form-label">Email:</label>
+					<input type="email" class="form-control" id="email" name="email" required>
+				  </div>
+				  <div class="mb-3">
+					<label for="new-password" class="col-form-label">Пароль:</label>
+					<input type="password" class="form-control" id="new-password" name="password" required>
+				  </div>
+				  <div class="mb-3">
+					<label for="confirm-password" class="col-form-label">Подтверждение пароля:</label>
+					<input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			var isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+			
+			var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+			var alreadyLoggedInModal = new bootstrap.Modal(document.getElementById('alreadyLoggedInModal'));
+			var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+			
+			var loginButton = document.querySelector('button.btn.btn-primary');
+			var registerButton = document.getElementById('registerBtn');
+			var loginForm = document.getElementById('loginForm');
+			var registerForm = document.getElementById('registerForm');
+			
+			if (loginButton) {
+				loginButton.addEventListener('click', function(event) {
+					event.preventDefault();
+					if (isAuthenticated) {
+						alreadyLoggedInModal.show();
+					} else {
+						loginModal.show();
+					}
+				});
+			}
+			
+			if (registerButton) {
+				registerButton.addEventListener('click', function(event) {
+					event.preventDefault();
+					loginModal.hide();
+					registerModal.show();
+				});
+			}
+			
+			if (loginForm) {
+				loginForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					var formData = new FormData(loginForm);
+					fetch('{% url "ajax_login" %}', {
+						method: 'POST',
+						body: formData
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.status === 'ok') {
+							alert('Авторизация прошла успешно!');
+							isAuthenticated = true;
+							loginModal.hide();
+						} else {
+							alert(data.error);
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+			}
+			
+			if (registerForm) {
+				registerForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					var formData = new FormData(registerForm);
+					fetch('{% url "ajax_register" %}', {
+						method: 'POST',
+						body: formData
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.status === 'ok') {
+							alert('Регистрация прошла успешно!');
+							isAuthenticated = true;
+							registerModal.hide();
+						} else {
+							alert(data.error);
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+			}
+			
+			loginModalEl.addEventListener('hidden.bs.modal', function () {
+				loginForm.reset();
+			});
+			
+			registerModalEl.addEventListener('hidden.bs.modal', function () {
+				registerForm.reset();
+			});
+		});
+		</script>
+
+
     </main>
 </body>
 </html>

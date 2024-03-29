@@ -1,0 +1,390 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добро пожаловать!</title>
+    <meta name="viewport" content="width-device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width-device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static "blog/img/main.jpg" %}');
+            background-size: cover;
+            background-position: center;
+        }
+
+        header {
+            background-color: #000000;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .overlay_slogan {
+            position: absolute;
+            border-radius: 20px;
+            top: 20%;
+            left: 10%;
+            width: 80%;
+            height: 25%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay_text_slogan {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.2em;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay_projects {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 180px;
+            height: 180px !important;
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .overlay_projects img {
+            display: block;
+            margin: 0 auto;
+            width: 100px;
+            height: auto;
+        }
+
+        .overlay_link {
+            display: block;
+        }
+
+        .overlay_tasks {
+            position: absolute;
+            top: 50%;
+            left: 30%;
+            width: 180px;
+            height: 180px !important;
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .overlay_tasks img {
+            display: block;
+            margin: 0 auto;
+            width: 100px;
+            height: auto;
+        }
+
+        .overlay_contacts {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px !important;
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .overlay_contacts img {
+            display: block;
+            margin: 0 auto;
+            width: 100px;
+            height: auto;
+        }
+
+        .overlay_about {
+            position: absolute;
+            top: 50%;
+            left: 70%;
+            width: 180px;
+            height: 180px !important;
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .overlay_about img {
+            display: block;
+            margin: 0 auto;
+            width: 100px;
+            height: auto;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          display: flex;
+          min-height: 100vh;
+          flex-direction: column;
+          position: relative;
+        }
+
+        .footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 180px;
+          background-color: #333;
+        }
+    </style>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript">
+		var isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+	</script>
+</head>
+<body>
+    <main>
+        <div class="footer"></div>
+        <div class="overlay_slogan">
+            <div class="overlay_text_slogan">
+                Бог простит, а я запомню!
+            </div>
+        </div>
+        <div class="overlay_projects">
+            <a href="{% url 'projects' %}" class="overlay_link">
+                <img src="{% static 'blog/img/projects.png' %}" alt="Проекты">
+            </a>
+        </div>
+        <div class="overlay_tasks">
+            <a href="{% url 'tasks' %}" class="overlay_link">
+                <img src="{% static 'blog/img/tasks.png' %}" alt="Задания">
+            </a>
+        </div>
+        <div class="overlay_contacts">
+            <a href="{% url 'contacts' %}" class="overlay_link">
+                <img src="{% static 'blog/img/contacts.png' %}" alt="Контакты">
+            </a>
+        </div>
+        <div class="overlay_about">
+            <a href="{% url 'about' %}" class="overlay_link">
+                <img src="{% static 'blog/img/about.png' %}" alt="О нас">
+            </a>
+        </div>
+		
+		<button type="button" class="btn btn-primary">Войти</button>
+		
+		<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="modalLabel">Войти</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+			  </div>
+			  <div class="modal-body">
+				<form id="loginForm" method="post">
+                  <div class="mb-3">
+                    <label for="username" class="col-form-label">Email:</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="col-form-label">Пароль:</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Вход</button>
+                  </div>
+                </form>
+			  </div>
+			  <div class="modal-footer">
+				<a href="#" class="btn btn-secondary" id="registerBtn">Регистрация</a>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="alreadyLoggedInModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Вход выполнен</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p>Вы уже вошли в систему.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="{% url 'logout' %}" class="btn btn-secondary">Выйти</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" id="registerModalLabel">Зарегистрироваться</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+			  </div>
+			  <div class="modal-body">
+				<form id="registerForm">
+				  <div class="mb-3">
+					<label for="email" class="col-form-label">Email:</label>
+					<input type="email" class="form-control" id="email" name="email" required>
+				  </div>
+				  <div class="mb-3">
+					<label for="new-password" class="col-form-label">Пароль:</label>
+					<input type="password" class="form-control" id="new-password" name="password" required>
+				  </div>
+				  <div class="mb-3">
+					<label for="confirm-password" class="col-form-label">Подтверждение пароля:</label>
+					<input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+				  </div>
+				</form>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			// Предполагается, что isAuthenticated устанавливается в шаблоне Django.
+			// Убедитесь, что сервер правильно отдаёт эту переменную.
+			var isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+			
+			var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+			var alreadyLoggedInModal = new bootstrap.Modal(document.getElementById('alreadyLoggedInModal'));
+			var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+			
+			var loginButton = document.querySelector('button.btn.btn-primary');
+			var registerButton = document.getElementById('registerBtn');
+			var loginForm = document.getElementById('loginForm');
+			var registerForm = document.getElementById('registerForm');
+			
+			if (loginButton) {
+				loginButton.addEventListener('click', function(event) {
+					event.preventDefault();
+					if (isAuthenticated) {
+						alreadyLoggedInModal.show();
+					} else {
+						loginModal.show();
+					}
+				});
+			}
+			
+			if (registerButton) {
+				registerButton.addEventListener('click', function(event) {
+					event.preventDefault();
+					loginModal.hide();
+					registerModal.show();
+				});
+			}
+			
+			if (loginForm) {
+				loginForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					var formData = new FormData(loginForm);
+					fetch('{% url "ajax_login" %}', {
+						method: 'POST',
+						body: formData
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.status === 'ok') {
+							alert('Авторизация прошла успешно!');
+							isAuthenticated = true; // Обновить состояние аутентификации
+							loginModal.hide();
+						} else {
+							alert(data.error);
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+			}
+			
+			if (registerForm) {
+				registerForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					var formData = new FormData(registerForm);
+					fetch('{% url "ajax_register" %}', {
+						method: 'POST',
+						body: formData
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.status === 'ok') {
+							alert('Регистрация прошла успешно!');
+							isAuthenticated = true; // Обновить состояние аутентификации
+							registerModal.hide();
+						} else {
+							alert(data.error);
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+			}
+			
+			// Закрыть модальное окно и очистить форму после закрытия
+			loginModalEl.addEventListener('hidden.bs.modal', function () {
+				loginForm.reset();
+			});
+			
+			registerModalEl.addEventListener('hidden.bs.modal', function () {
+				registerForm.reset();
+			});
+		});
+		</script>
+
+
+    </main>
+</body>
+</html>
