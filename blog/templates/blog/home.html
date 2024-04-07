@@ -3,385 +3,346 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Добро пожаловать!</title>
-    <meta name="viewport" content="width-device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width-device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #ffffff;
-            color: #000000;
+  <meta charset="UTF-8">
+  <title>Проекты.</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+  <style>
+      .slider-container {
+          position: relative;
+          width: 600px;
+          height: 400px;
+          margin-top: 25px;
+          margin-right: auto;
+          margin-bottom: 50px;
+          margin-left: auto;
+          overflow: hidden;
+      }
+      .slider {
+          display: flex;
+          transition: transform 0.5s ease-in-out;
+      }
+      .slide {
+          position: relative;
+          flex: 0 0 600px;
+      }
+      .slide_text {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          background-color: rgba(0, 0, 0, 0.5);
+          color: white;
+          padding: 5px;
+      }
+      .slider img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+      .prev-button,
+      .next-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 50px;
+          height: 50px;
+          background-color: transparent;
+          border: none;
+          font-size: 24px;
+          color: white;
+      }
+
+      .prev-button {
+          left: 10px;
+      }
+
+      .next-button {
+          right: 10px;
+      }
+
+      .picture {
+          border-radius: 20px;
+      }
+      body {
             margin: 0;
             padding: 0;
-            background-image: url('{% static "blog/img/main.jpg" %}');
+            background-color: rgb(19, 20, 30);
             background-size: cover;
             background-position: center;
         }
-
-        header {
-            background-color: #000000;
-            padding: 10px 0;
-        }
-
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        nav ul li:last-child {
-            margin-right: 0;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .overlay_slogan {
-            position: absolute;
-            border-radius: 20px;
-            top: 20%;
-            left: 10%;
-            width: 80%;
-            height: 25%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .overlay_text_slogan {
+      .header {
+            background-color: black;
+            overflow: hidden;
+            padding-right: 0;
+      }
+      .header a {
+            float: left;
+            display: block;
             color: white;
-            font-size: 20px;
-            font-weight: bold;
             text-align: center;
-            padding: 20px;
-            line-height: 1.2em;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+      }
+      .header a:hover {
+            background-color: #ddd;
+            color: black;
+      }
+      .header a.active {
+            background-color: white;
+            color: black;
+      }
+      .window_authorization {
+            position: fixed;
+            width: 100%;
             height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: all 0.1s ease 0s;
+      }
+      .window_authorization:target{
+          opacity: 1;
+          visibility: visible;
+      }
+      .window_authorization_body {
+            min-height: 100%;
             display: flex;
-            justify-content: center;
             align-items: center;
-        }
-
-        .overlay_projects {
+            justify-content: center;
+      }
+      .window_authorization_content {
+            background-color: aliceblue;
+            color: black;
+            width: 350px;
+            height: 300px;
+            border-width: 5px;
+            border-radius: 5px;
+            position: relative;
+            text-align: center;
+      }
+      .window_authorization_close {
             position: absolute;
-            top: 50%;
-            left: 10%;
-            width: 180px;
-            height: 180px !important;
-            background-color: whitesmoke;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 20px;
-        }
-
-        .overlay_projects img {
-            display: block;
-            margin: 0 auto;
-            width: 100px;
-            height: auto;
-        }
-
-        .overlay_link {
-            display: block;
-        }
-
-        .overlay_tasks {
+            right: 10px;
+            top:10px;
+            font-size: 20px;
+            color: rgb(255, 0, 47);
+            text-decoration: none;
+      }
+      .window_authorization_title {
+            font-size: 40px;
+            marin: 0px 0px 1em 0px;
+      }
+      .window_authorization_text {
+            margin-top: 30px;
+      }
+      .window_authorization_area{
             position: absolute;
-            top: 50%;
-            left: 30%;
-            width: 180px;
-            height: 180px !important;
-            background-color: whitesmoke;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 20px;
-        }
-
-        .overlay_tasks img {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+      }
+      .authorization_input {
+            margin: 10px 0;
+            text-align: center;
+      }
+      .authorization_button, .register_button {
             display: block;
-            margin: 0 auto;
-            width: 100px;
-            height: auto;
-        }
+            width: 50%;
+            margin: auto;
+            margin-top: 10px;
+      }
 
-        .overlay_contacts {
+      .authorization_link {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 180px;
-            height: 180px !important;
-            background-color: whitesmoke;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 20px;
-        }
+            justify-content: flex-end;
+            right: 0;
+            top: 0;
+            margin-right: 0;
+            padding-right: 0;
+      }
 
-        .overlay_contacts img {
-            display: block;
-            margin: 0 auto;
-            width: 100px;
-            height: auto;
-        }
+      .window_authorization_title {
+          margin-bottom: 20px;
+          text-align: center;
+          font-size: 24px;
+      }
 
-        .overlay_about {
-            position: absolute;
-            top: 50%;
-            left: 70%;
-            width: 180px;
-            height: 180px !important;
-            background-color: whitesmoke;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 20px;
-        }
+      .logout_button {
+          padding: 10px 20px;
+          cursor: pointer;
+          font-size: 18px;
+      }
 
-        .overlay_about img {
-            display: block;
-            margin: 0 auto;
-            width: 100px;
-            height: auto;
-        }
+  </style>
 
-        body {
-          margin: 0;
-          padding: 0;
-          display: flex;
-          min-height: 100vh;
-          flex-direction: column;
-          position: relative;
-        }
-
-        .footer {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          height: 180px;
-          background-color: #333;
-        }
-    </style>
-	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-	
-	<script type="text/javascript">
-		var isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
-	</script>
 </head>
 <body>
+    {% include 'blog/translator.html' %}
     <main>
-        <div class="footer"></div>
-        <div class="overlay_slogan">
-            <div class="overlay_text_slogan">
-                Бог простит, а я запомню!
+        <div class="header">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'projects' %}">Projects</a>
+            <a href="{% url 'tasks' %}">Tasks</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contacts' %}">Contacts</a>
+            <div class="authorization_link">
+                <a href="#window_authorization" ><i class="fas fa-users" style="color: #ffffff;"></i></a>
             </div>
         </div>
-        <div class="overlay_projects">
-            <a href="{% url 'projects' %}" class="overlay_link">
-                <img src="{% static 'blog/img/projects.png' %}" alt="Проекты">
-            </a>
-        </div>
-        <div class="overlay_tasks">
-            <a href="{% url 'tasks' %}" class="overlay_link">
-                <img src="{% static 'blog/img/tasks.png' %}" alt="Задания">
-            </a>
-        </div>
-        <div class="overlay_contacts">
-            <a href="{% url 'contacts' %}" class="overlay_link">
-                <img src="{% static 'blog/img/contacts.png' %}" alt="Контакты">
-            </a>
-        </div>
-        <div class="overlay_about">
-            <a href="{% url 'about' %}" class="overlay_link">
-                <img src="{% static 'blog/img/about.png' %}" alt="О нас">
-            </a>
-        </div>
-		
-		<button type="button" class="btn btn-primary">Войти</button>
-		
-		<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h5 class="modal-title" id="modalLabel">Войти</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-			  </div>
-			  <div class="modal-body">
-				<form id="loginForm" method="post">
-                  <div class="mb-3">
-                    <label for="username" class="col-form-label">Email:</label>
-                    <input type="text" class="form-control" id="username" name="username">
-                  </div>
-                  <div class="mb-3">
-                    <label for="password" class="col-form-label">Пароль:</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Вход</button>
-                  </div>
-                </form>
-			  </div>
-			  <div class="modal-footer">
-				<a href="#" class="btn btn-secondary" id="registerBtn">Регистрация</a>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		
-		<div class="modal fade" id="alreadyLoggedInModal" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Вход выполнен</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p>Вы уже вошли в систему.</p>
-					</div>
-					<div class="modal-footer">
-						<a href="{% url 'logout' %}" class="btn btn-secondary">Выйти</a>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		
-		<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h5 class="modal-title" id="registerModalLabel">Зарегистрироваться</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-			  </div>
-			  <div class="modal-body">
-				<form id="registerForm">
-				  <div class="mb-3">
-					<label for="email" class="col-form-label">Email:</label>
-					<input type="email" class="form-control" id="email" name="email" required>
-				  </div>
-				  <div class="mb-3">
-					<label for="new-password" class="col-form-label">Пароль:</label>
-					<input type="password" class="form-control" id="new-password" name="password" required>
-				  </div>
-				  <div class="mb-3">
-					<label for="confirm-password" class="col-form-label">Подтверждение пароля:</label>
-					<input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
-				  </div>
-				  <div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-					<button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-				  </div>
-				</form>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		
-		<script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function() {
-			var isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
-			
-			var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-			var alreadyLoggedInModal = new bootstrap.Modal(document.getElementById('alreadyLoggedInModal'));
-			var registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-			
-			var loginButton = document.querySelector('button.btn.btn-primary');
-			var registerButton = document.getElementById('registerBtn');
-			var loginForm = document.getElementById('loginForm');
-			var registerForm = document.getElementById('registerForm');
-			
-			if (loginButton) {
-				loginButton.addEventListener('click', function(event) {
-					event.preventDefault();
-					if (isAuthenticated) {
-						alreadyLoggedInModal.show();
-					} else {
-						loginModal.show();
-					}
-				});
-			}
-			
-			if (registerButton) {
-				registerButton.addEventListener('click', function(event) {
-					event.preventDefault();
-					loginModal.hide();
-					registerModal.show();
-				});
-			}
-			
-			if (loginForm) {
-				loginForm.addEventListener('submit', function(e) {
-					e.preventDefault();
-					var formData = new FormData(loginForm);
-					fetch('{% url "ajax_login" %}', {
-						method: 'POST',
-						body: formData
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.status === 'ok') {
-							alert('Авторизация прошла успешно!');
-							isAuthenticated = true;
-							loginModal.hide();
-						} else {
-							alert(data.error);
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-					});
-				});
-			}
-			
-			if (registerForm) {
-				registerForm.addEventListener('submit', function(e) {
-					e.preventDefault();
-					var formData = new FormData(registerForm);
-					fetch('{% url "ajax_register" %}', {
-						method: 'POST',
-						body: formData
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.status === 'ok') {
-							alert('Регистрация прошла успешно!');
-							isAuthenticated = true;
-							registerModal.hide();
-						} else {
-							alert(data.error);
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-					});
-				});
-			}
-			
-			loginModalEl.addEventListener('hidden.bs.modal', function () {
-				loginForm.reset();
-			});
-			
-			registerModalEl.addEventListener('hidden.bs.modal', function () {
-				registerForm.reset();
-			});
-		});
-		</script>
+        <div class="slider-container">
+          <div class="slider">
+            <div class="slide">
+              <img src="{% static 'blog/img/projects neural networks.jpg' %}" width="600" height="400" alt="Белый пушистый кот" class="picture">
+              <div class="slide_text">Нейронные сети.</div>
+            </div>
+            <div class="slide">
+              <img src="{% static 'blog/img/projects web-app.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <div class="slide_text">Веб-сайты.</div>
+            </div>
+            <div class="slide">
+              <img src="{% static 'blog/img/projects graphic interfaces.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <div class="slide_text">Графические интерфейсы.</div>
+            </div>
+            <div class="slide">
+              <img src="{% static 'blog/img/projects translater.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <div class="slide_text">Переводчик.</div>
+            </div>
+          </div>
+          <button class="prev-button" type="button" aria-label="Посмотреть предыдущий слайд">&lt;</button>
+          <button class="next-button" type="button" aria-label="Посмотреть следующий слайд">&gt;</button>
+        </div>
+
+        <div id="window_authorization" class="window_authorization">
+        <a href="#" class="window_authorization_area"></a>
+        <div class="window_authorization_body">
+            <div class="window_authorization_content">
+                <a href="#" class="window_authorization_close">X</a>
+                {% if user.is_authenticated %}
+                    <div class="window_authorization_title">Вы авторизованы</div>
+                    <button class="logout_button">Выйти</button>
+                {% else %}
+                    <div class="window_authorization_title"></div>
+                    <div class="window_authorization_text">Введите данные:</div>
+                    <input type="text" id="username" name="username" class="authorization_input" placeholder="Имя пользователя"><br>
+                    <input type="email" id="email" name="email" class="authorization_input" placeholder="Электронная почта"><br>
+                    <input type="password" id="password" name="password" class="authorization_input" placeholder="Пароль"><br>
+                    <button class="authorization_button">Войти</button>
+                    <button class="register_button">Зарегистрироваться</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 
+    <script>
+    // Проверка и добавление обработчика для кнопки регистрации
+    const registerButton = document.querySelector('.register_button');
+    if (registerButton) {
+        registerButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            var data = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password1: document.getElementById('password').value,
+                password2: document.getElementById('password').value,
+            };
+
+            fetch('/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                if(data.status === 'success') {
+                    alert(data.message);
+                    window.location.href = '/';
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+    // Проверка и добавление обработчика для кнопки входа
+    const loginButton = document.querySelector('.authorization_button');
+    if (loginButton) {
+        loginButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            var data = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+            };
+
+            fetch('/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Login Success:', data);
+                if(data.status === 'success') {
+                    alert(data.message);
+                    window.location.href = '/';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Login Error:', error);
+            });
+        });
+    }
+
+    // Проверка и добавление обработчика для кнопки выхода
+    const logoutButton = document.querySelector('.logout_button');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            fetch('/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                throw new Error('Logout failed');
+            })
+            .then(data => {
+                console.log('Logout Success:', data);
+                alert(data.message);
+                window.location.href = '/';
+            })
+            .catch((error) => {
+                console.error('Logout Error:', error);
+            });
+        });
+    }
+    </script>
     </main>
+    <script src="{% static 'blog/js/projects.js' %}"></script>
 </body>
 </html>

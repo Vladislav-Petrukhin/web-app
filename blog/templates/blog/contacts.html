@@ -51,58 +51,6 @@
     </style>
 </head>
 <body>
-
-<textarea id="text-to-translate" rows="4" cols="50" placeholder="Введите текст для перевода"></textarea>
-<br>
-<textarea id="translation-result" rows="4" cols="50" placeholder="Перевод"></textarea>
-<br>
-<button id="switch-lang">Сменить язык перевода</button>
-
-<script>
-let sourceLang = 'ru';
-let targetLang = 'en';
-
-document.getElementById('switch-lang').addEventListener('click', function() {
-    [sourceLang, targetLang] = [targetLang, sourceLang];
-
-    document.getElementById('text-to-translate').placeholder = `Введите текст (${sourceLang === 'ru' ? 'русский' : 'английский'})`;
-
-    document.getElementById('text-to-translate').value = '';
-    document.getElementById('translation-result').value = '';
-});
-
-function debounce(func, wait, immediate) {
-    var timeout;
-    return function() {
-        var context = this, args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        }, wait);
-        if (immediate && !timeout) func.apply(context, args);
-    };
-}
-
-document.getElementById('text-to-translate').addEventListener('input', debounce(function() {
-    var text = this.value;
-    if (text.trim().length > 0) {
-        fetch('/translate/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({text: text, source: sourceLang, target: targetLang})
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('translation-result').textContent = data.translation;
-        })
-        .catch(error => console.error('Ошибка:', error));
-    }
-}, 500));
-</script>
-
-
+{% include 'blog/translator.html' %} 
 </body>
 </html>

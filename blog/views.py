@@ -3,12 +3,11 @@ from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login, logout
-from googletrans import Translator, constants
+from django.contrib.auth import login
+from django.contrib.auth import logout
 import json
 
 class Bloglist(ListView):
@@ -57,51 +56,59 @@ class AboutPageView(View):
 class ContactsPageView(TemplateView):
     template_name = 'blog/contacts.html'
 
-@csrf_exempt
-def ajax_register(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
-    confirm_password = request.POST.get('confirmPassword')
 
-    if password == confirm_password:
-        user = User.objects.create_user(username=email, email=email, password=password)
-        user.save()
-        return JsonResponse({'status': 'ok'})
-    else:
-        return JsonResponse({'status': 'failed', 'error': 'Пароли не совпадают'})
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 
 @csrf_exempt
-def ajax_login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(username=username, password=password)
+def register(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password1')
+        password2 = data.get('password2')
 
-    if user is not None:
-        login(request, user)
-        return JsonResponse({'status': 'ok'})
+        if not (username and email and password and password == password2):
+            return JsonResponse(
+                {'status': 'error', 'message': 'Необходимо заполнить все поля и убедиться, что пароли совпадают.'})
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'status': 'error', 'message': 'Пользователь с таким именем уже существует.'})
+        else:
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
+            login(request, user)
+            return JsonResponse({'status': 'success', 'message': 'Регистрация прошла успешно!'})
     else:
-        return JsonResponse({'status': 'failed', 'error': 'Неверный логин или пароль'})
+        return JsonResponse({'status': 'error', 'message': 'Неверный метод запроса'}, status=400)
 
+
+@csrf_exempt
+def login_user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'status': 'success', 'message': 'Вы успешно вошли в систему.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Неверное имя пользователя или пароль.'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Неверный метод запроса'}, status=400)
+
+@csrf_exempt
 def logout_user(request):
     logout(request)
+    return JsonResponse({'status': 'success', 'message': 'Вы успешно вышли из системы.'})
 
-    return redirect('home')
-
-@csrf_exempt
-@require_POST
-def translate_text(request):
-    data = json.loads(request.body)
-    text = data.get('text', "")
-    dest_lang = data.get('target', 'ru')
-
-    translator = Translator()
-
-    try:
-        translation = translator.translate(text, dest=dest_lang)
-        return JsonResponse({'translation': translation.text})
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
 
 
 
