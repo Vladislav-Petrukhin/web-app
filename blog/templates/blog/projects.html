@@ -64,7 +64,7 @@
       body {
             margin: 0;
             padding: 0;
-            background-image: url('{% static "blog/img/projects main theme.png" %}');
+            background-image: url('{% static "blog/img/projectsmaintheme.png" %}');
             background-size: cover;
             background-position: center;
         }
@@ -93,26 +93,20 @@
 </head>
 <body>
     {% include 'blog/translator.html' %} 
-    <div class="header">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'projects' %}">Projects</a>
-        <a href="{% url 'tasks' %}">Tasks</a>
-        <a href="{% url 'about' %}">About</a>
-        <a href="{% url 'contacts' %}">Contacts</a>
-    </div>
+    {% include "blog/base_header.html" %}
     <main>
       <div class="slider-container">
         <div class="slider">
           <div class="slide">
-            <img src="{% static 'blog/img/projects neural networks.png' %}" width="600" height="400" alt="Белый пушистый кот" class="picture">
+            <img src="{% static 'blog/img/projectsneuralnetworks.png' %}" width="600" height="400" alt="Белый пушистый кот" class="picture">
             <div class="slide_text">Нейронные сети.</div>
           </div>
           <div class="slide">
-            <img src="{% static 'blog/img/projects web-app.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+            <img src="{% static 'blog/img/projectsweb-app.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
             <div class="slide_text">Веб-сайты.</div>
           </div>
           <div class="slide">
-            <img src="{% static 'blog/img/projects graphic interfaces.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+            <img src="{% static 'blog/img/projectsgraphicinterfaces.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
             <div class="slide_text">Графические интерфейсы.</div>
           </div>
         </div>

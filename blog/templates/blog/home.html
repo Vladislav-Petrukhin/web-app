@@ -163,7 +163,7 @@
       }
 
       .authorization_link {
-            position: absolute;
+            position: relative;
             display: flex;
             justify-content: flex-end;
             right: 0;
@@ -190,33 +190,24 @@
 <body>
     {% include 'blog/translator.html' %}
     <main>
-        <div class="header">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'projects' %}">Projects</a>
-            <a href="{% url 'tasks' %}">Tasks</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'contacts' %}">Contacts</a>
-            <div class="authorization_link">
-                <a href="#window_authorization" ><i class="fas fa-users" style="color: #ffffff;"></i></a>
-            </div>
-        </div>
+        {% include "blog/base_header.html" %}
 
         <div class="slider-container">
           <div class="slider">
             <div class="slide">
-              <img src="{% static 'blog/img/projects neural networks.jpg' %}" width="600" height="400" alt="Белый пушистый кот" class="picture">
+              <img src="{% static 'blog/img/projectsneuralnetworks.png' %}" width="600" height="400" class="picture">
               <div class="slide_text">Нейронные сети.</div>
             </div>
             <div class="slide">
-              <img src="{% static 'blog/img/projects web-app.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <img src="{% static 'blog/img/projectsweb-app.jpg' %}" width="600" height="400" class="picture">
               <div class="slide_text">Веб-сайты.</div>
             </div>
             <div class="slide">
-              <img src="{% static 'blog/img/projects graphic interfaces.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <img src="{% static 'blog/img/projectsgraphicinterfaces.jpg' %}" width="600" height="400" class="picture">
               <div class="slide_text">Графические интерфейсы.</div>
             </div>
             <div class="slide">
-              <img src="{% static 'blog/img/projects translater.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
+              <img src="{% static 'blog/img/projectstranslater.jpg' %}" width="600" height="400" alt="Рыжий пушистый кот" class="picture">
               <div class="slide_text">Переводчик.</div>
             </div>
           </div>
@@ -280,7 +271,6 @@
         });
     }
 
-    // Проверка и добавление обработчика для кнопки входа
     const loginButton = document.querySelector('.authorization_button');
     if (loginButton) {
         loginButton.addEventListener('click', function(e) {
@@ -313,7 +303,6 @@
         });
     }
 
-    // Проверка и добавление обработчика для кнопки выхода
     const logoutButton = document.querySelector('.logout_button');
     if (logoutButton) {
         logoutButton.addEventListener('click', function(e) {
