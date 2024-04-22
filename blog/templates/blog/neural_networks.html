@@ -1,0 +1,150 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нейронные Сети</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static "blog/img/about theme.png" %}');
+            background-size: 150%;
+            background-position: center;
+        }
+        .header {
+            background-color: black;
+            overflow: hidden;
+        }
+        .header a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .header a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .header a.active {
+            background-color: white;
+            color: black;
+        }
+        .content {
+            background-color: black;
+            color: white;
+            margin-top: 0px;
+            margin-bottom: 0;
+            margin-left: 10%;
+            margin-right: 10%;
+            padding: 20px;
+            height: 100vh;
+        }
+        .content p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .content input, .content button {
+            padding: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .content textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'blog/translator.html' %}
+    {% include "blog/base_header.html" %}
+
+    <div class="content">
+        <h2>Управление нейронной сетью</h2>
+        <form action="{% url 'neural_networks' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Обучить и спрогнозировать</button>
+        </form>
+        <form action="{% url 'fetch_predictions' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Вывести из БД</button>
+        </form>
+        <textarea id="outputArea" placeholder="Здесь будет вывод...">
+            {% if mse %}
+            	MSE: {{ mse }}
+                MAE: {{ mae }}
+                RMSE: {{ rmse }}
+            {% else %}
+            	{% if trained %}
+            		{{ trained }}
+            	{% else %}
+Здесь будет вывод..
+            	{% endif %}
+            {% endif %}
+        </textarea>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const outputArea = document.getElementById("outputArea");
+        const trainButton = document.querySelector('form[action="{% url 'neural_networks' %}"] button');
+        const fetchButton = document.querySelector('form[action="{% url 'fetch_predictions' %}"] button');
+
+        trainButton.addEventListener("click", function(event) {
+            event.preventDefault();  // Предотвратить стандартную отправку формы
+            fetch('{% url 'neural_networks' %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    outputArea.value = `${data.trained}`;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        fetchButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            fetch('{% url 'fetch_predictions' %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    outputArea.value = `MSE: ${data.mse}\nMAE: ${data.mae}\nRMSE: ${data.rmse}`;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
+    </script>
+</body>
+</html>
