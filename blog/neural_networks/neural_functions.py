@@ -22,7 +22,7 @@ def train_and_predict():
     password = 'admin'
     database = 'hh'
     table_name = 'db_neural_network'
-    engine = create_engine(f'mysql+pymysql://{username}:{password}@localhost/{database}')
+    engine = create_engine(f'mysql+pymysql://{username}:{password}@db/{database}')
     df = pd.read_sql_table(table_name, engine)
 
     df.drop(df.columns[[0, 14, 16, 17]], axis=1, inplace=True)

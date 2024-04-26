@@ -122,7 +122,7 @@ def neural_networks(request):
     if request.method == 'POST':
         mae, mse, rmse = train_and_predict()
 
-        connection = pymysql.connect(host='localhost',
+        connection = pymysql.connect(host='db',
                                      user='root',
                                      password='admin',
                                      database='hh',
@@ -143,7 +143,7 @@ def neural_networks(request):
 @csrf_exempt
 def fetch_predictions(request):
     if request.method == 'POST':
-        connection = pymysql.connect(host='localhost',
+        connection = pymysql.connect(host='db',
                                      user='root',
                                      password='admin',
                                      database='hh',
