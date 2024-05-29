@@ -1,16 +1,15 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql
-    environment:
-      MYSQL_DATABASE: 'django'
-      MYSQL_ROOT_PASSWORD: 'admin'
+  mongo:
+    image: mongo
     ports:
-      - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
+      - "27017:27017"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
 
   web:
     build: .
@@ -20,12 +19,12 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - mongo
     environment:
-      - "DJANGO_DATABASE_HOST=db"
+      - "DJANGO_DATABASE_HOST=mongo"
       - "DJANGO_DATABASE_NAME=django"
       - "DJANGO_DATABASE_USER=root"
       - "DJANGO_DATABASE_PASSWORD=admin"
 
 volumes:
-  mysql-data:
+  mongo-data:

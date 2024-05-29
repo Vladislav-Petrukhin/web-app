@@ -11,6 +11,7 @@ from django.contrib.auth import logout
 import json
 import pymysql.cursors
 from blog.neural_networks.neural_functions import train_and_predict
+from .models import ModelMetrics, User
 
 
 class Bloglist(ListView):
@@ -122,17 +123,8 @@ def neural_networks(request):
     if request.method == 'POST':
         mae, mse, rmse = train_and_predict()
 
-        connection = pymysql.connect(host='db',
-                                     user='root',
-                                     password='admin',
-                                     database='hh',
-                                     cursorclass=pymysql.cursors.DictCursor)
-
-        with connection:
-            with connection.cursor() as cursor:
-                sql = "INSERT INTO model_metrics (mae, mse, rmse) VALUES (%s, %s, %s)"
-                cursor.execute(sql, (mae, mse, rmse))
-            connection.commit()
+        metric = ModelMetrics(mae=mae, mse=mse, rmse=rmse)
+        metric.save()
 
         return JsonResponse({
             'trained': "Модель успешно обучена! Метрика сохранена в БД."
@@ -140,33 +132,22 @@ def neural_networks(request):
     else:
         return render(request, 'blog/neural_networks.html')
 
+
 @csrf_exempt
 def fetch_predictions(request):
     if request.method == 'POST':
-        connection = pymysql.connect(host='db',
-                                     user='root',
-                                     password='admin',
-                                     database='hh',
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
-
         try:
-            with connection.cursor() as cursor:
-                sql = "SELECT mae, mse, rmse FROM model_metrics ORDER BY id DESC LIMIT 1"
-                cursor.execute(sql)
-                result = cursor.fetchone()
-
-            if result:
+            # Получение последней сохраненной метрики
+            metric = ModelMetrics.objects.all().order_by('-id').first()
+            if metric:
                 return JsonResponse({
-                    'mse': result['mse'],
-                    'mae': result['mae'],
-                    'rmse': result['rmse']
+                    'mse': metric.mse,
+                    'mae': metric.mae,
+                    'rmse': metric.rmse
                 })
             else:
                 return JsonResponse({'error': 'Нет таких данных ;('}, status=404)
-
-        finally:
-            connection.close()
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse({'error': 'Что-то пошло не так :('}, status=400)
-

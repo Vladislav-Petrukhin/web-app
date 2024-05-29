@@ -77,21 +77,26 @@ WSGI_APPLICATION = 'djangoProject1.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER': 'root',
-        'PASSWORD': 'admin',
-        'HOST': 'db',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        'ENGINE': 'djongo',
+        'NAME': 'djongo_db',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongo',
+            'port': 27017,
+            'username': 'root',
+            'password': 'admin',
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1'
         }
     }
 }
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'blog.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
